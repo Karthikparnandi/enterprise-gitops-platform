@@ -12,8 +12,8 @@ RUN npm run build
 # --- Stage 2: Production Runtime Stage ---
 FROM nginx:1.27-alpine
 
-COPY --from=builder /app/dist /usr/share/nginx/html
-
+# Copy the HTML dashboard file directly into the default Nginx web root directory
+COPY index.html /usr/share/nginx/html/index.html
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
