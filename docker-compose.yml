@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: gitops-backend-api
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql://postgres:securepassword@postgres-db:5432/gitops_db
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: gitops-frontend-ui
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: gitops-postgres-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=securepassword
+      - POSTGRES_DB=gitops_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

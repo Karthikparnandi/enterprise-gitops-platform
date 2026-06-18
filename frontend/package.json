@@ -1,0 +1,9 @@
+{
+  "name": "gitops-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "mkdir -p dist && echo '<h1>GitOps Enterprise Dashboard</h1><p>Status: Connected to Microservices API Node</p>' > dist/index.html"
+  }
+}
